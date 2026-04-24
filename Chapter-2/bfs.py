@@ -1,5 +1,5 @@
 from collections import deque
-from utils import Maze
+from utils import Maze, animate_path
 
 """
 0 -> Empty
@@ -53,14 +53,11 @@ if __name__ == "__main__":
         [3, 1, 1],
         [2, 3, 1],
     ]
-    starting_point = (0, 4)
-    row, col = 5, 12
+    starting_point = (2, 2)
+    row, col = 5, 5
 
     # Processing
     maze = Maze(coordinates, row, col)
 
     shortest_path, shortest_distance = run_bfs(maze.matrix, starting_point)
-    print(maze)
-    print("Staring Position:", starting_point)
-    print("Shorted Path:", shortest_path)
-    print("Shortest Distance to Goal:", shortest_distance)
+    animate_path(maze, shortest_path, starting_point, shortest_distance)
