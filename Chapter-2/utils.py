@@ -16,10 +16,9 @@ def find_order(num: int) -> int:
 
 
 def animate_path(maze, shortest_path, starting_point, shortest_distance, delay=0.3):
-    while True:  # Loop forever (Ctrl+C to stop)
+    while True:
         for i, path in enumerate(shortest_path):
-            # Move cursor to top (clear and redraw)
-            os.system("clear")  # Use 'cls' on Windows
+            os.system("clear")
 
             print("Starting Position:", starting_point)
             print("Shortest Distance to Goal:", shortest_distance)
@@ -29,7 +28,7 @@ def animate_path(maze, shortest_path, starting_point, shortest_distance, delay=0
 
             time.sleep(delay)
 
-        time.sleep(1)  # Pause at the end before looping
+        time.sleep(1)
 
 
 class Maze:
