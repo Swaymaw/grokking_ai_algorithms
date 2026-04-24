@@ -24,7 +24,7 @@ def animate_path(maze, shortest_path, starting_point, shortest_distance, delay=0
             print("Shortest Distance to Goal:", shortest_distance)
             print(f"Step: {i + 1}/{len(shortest_path)}")
             print()
-            print(maze.__str__(path))
+            print(maze.to_string(path))
 
             time.sleep(delay)
 
@@ -41,12 +41,14 @@ class Maze:
         for r, c, t in coordinates:
             self.matrix[r][c] = t
 
-    def __str__(self, player_coord: tuple[int, int]) -> str:
+    def to_string(self, player_coord: tuple[int, int] | None = None) -> str:
         row_order = find_order(self.row - 1)
         col_order = find_order(self.col - 1)
 
         matrix = deepcopy(self.matrix)
-        matrix[player_coord[0]][player_coord[1]] = "*"
+        if player_coord is not None:
+            row, col = player_coord
+            matrix[row][col] = "*"
 
         res = " " * (4 + row_order)
         res += " ".join([str(i) for i in range(0, self.col)])
@@ -62,3 +64,6 @@ class Maze:
                 res += str(matrix[r][c]) + " " * (find_order(c + 1))
             res += "\n"
         return res
+
+    def __str__(self):
+        return self.to_string()
