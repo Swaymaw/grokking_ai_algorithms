@@ -1,6 +1,6 @@
-from copy import deepcopy
 import os
 import time
+from copy import deepcopy
 
 
 def find_order(num: int) -> int:
@@ -36,15 +36,41 @@ class Maze:
         self.row = row
         self.col = col
 
-        self.matrix = [[0] * col for _ in range(row)]
+        self.matrix = [["0"] * col for _ in range(row)]
 
         for r, c, t in coordinates:
-            self.matrix[r][c] = t
+            self.matrix[r][c] = str(t)
+
+    def get_neighbors(
+        self, coord: tuple[int, int], include_diagonal: bool = False
+    ) -> list[tuple[int, int]]:
+        r, c = coord
+        neighbors = []
+
+        if r > 0 and self.matrix[r - 1][c] != "1":
+            neighbors.append((r - 1, c))
+        if c > 0 and self.matrix[r][c - 1] != "1":
+            neighbors.append((r, c - 1))
+        if r < self.row - 1 and self.matrix[r + 1][c] != "1":
+            neighbors.append((r + 1, c))
+        if c < self.col - 1 and self.matrix[r][c + 1] != "1":
+            neighbors.append((r, c + 1))
+
+        if include_diagonal:
+            if c < self.col - 1:
+                if r < self.row - 1 and self.matrix[r + 1][c + 1] != "1":
+                    neighbors.append((r + 1, c + 1))
+                if r > 0 and self.matrix[r - 1][c + 1] != "1":
+                    neighbors.append((r - 1, c + 1))
+            if c > 0:
+                if r < self.row - 1 and self.matrix[r + 1][c - 1] != "1":
+                    neighbors.append((r + 1, c - 1))
+                if r > 0 and self.matrix[r - 1][c - 1] != "1":
+                    neighbors.append((r - 1, c - 1))
+        return neighbors
 
     def to_string(self, player_coord: tuple[int, int] | None = None) -> str:
         row_order = find_order(self.row - 1)
-        col_order = find_order(self.col - 1)
-
         matrix = deepcopy(self.matrix)
         if player_coord is not None:
             row, col = player_coord

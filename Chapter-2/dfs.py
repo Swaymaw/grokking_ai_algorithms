@@ -1,5 +1,3 @@
-from collections import deque
-
 from utils import Maze, animate_path
 
 """
@@ -9,27 +7,24 @@ from utils import Maze, animate_path
 """
 
 
-def run_bfs(maze: Maze, current_point: tuple[int, int], visited_points: set = set()):
+def run_dfs(maze: Maze, current_point: tuple[int, int], visited_points: set = set()):
     matrix = maze.matrix
-    queue: deque = deque()
-    queue.append((current_point, 0))
-    visited_points.add(current_point)
-
+    stack = [(current_point, 0)]
     parent_map: dict[tuple[int, int], tuple[int, int] | None] = {current_point: None}
-    while queue:
-        (r, c), depth = queue.popleft()
+    while stack:
+        (r, c), depth = stack.pop()
+        visited_points.add((r, c))
         neighbors = maze.get_neighbors((r, c), include_diagonal=True)
         for neighbor in neighbors:
             if neighbor not in visited_points:
+                stack.append((neighbor, depth + 1))
                 parent_map[neighbor] = (r, c)
-                queue.append((neighbor, depth + 1))
-                # visited_points.add(neighbor)
                 if matrix[neighbor[0]][neighbor[1]] == "2":
                     path = []
                     cur_point = neighbor
                     while cur_point := parent_map.get(cur_point):
                         path.append(cur_point)
-                    return path[::-1], depth + 1
+                    return path[::-1], (depth + 1,)
 
     return [], -1
 
@@ -50,7 +45,7 @@ if __name__ == "__main__":
     # Processing
     maze = Maze(coordinates, row, col)
 
-    shortest_path, shortest_distance = run_bfs(maze, starting_point)
+    shortest_path, shortest_distance = run_dfs(maze, starting_point)
 
     if shortest_distance == -1:
         print("No Path Found")
