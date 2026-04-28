@@ -32,14 +32,41 @@ def animate_path(maze, shortest_path, starting_point, shortest_distance, delay=0
 
 
 class Maze:
-    def __init__(self, coordinates: list[list[int]], row: int, col: int):
+    def __init__(
+        self,
+        coordinates: list[list[int]],
+        row: int,
+        col: int,
+        weights: dict[tuple[int, int], int] = {
+            (0, 1): 1,
+            (1, 0): 1,
+            (0, -1): 1,
+            (-1, 0): 1,
+        },
+    ):
         self.row = row
         self.col = col
+        self.weights = weights
+        self.coordinates = coordinates
 
         self.matrix = [["0"] * col for _ in range(row)]
 
         for r, c, t in coordinates:
             self.matrix[r][c] = str(t)
+
+    def get_goal_coords(self):
+        for r, c, val in self.coordinates:
+            if val == "2":
+                return (r, c)
+        return (0, 0)
+
+    def get_cost(self, parent: tuple[int, int], neighbor: tuple[int, int]):
+        x1, y1 = parent
+        x2, y2 = neighbor
+        x = x2 - x1
+        y = y2 - y1
+
+        return self.weights.get((x, y), 1)
 
     def get_neighbors(
         self, coord: tuple[int, int], include_diagonal: bool = False
