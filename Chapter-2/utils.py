@@ -96,6 +96,13 @@ class Maze:
                     neighbors.append((r - 1, c - 1))
         return neighbors
 
+    def get_path_cost(self, path: list[tuple[int, int]]):
+        total = 0
+        for i in range(len(path) - 1):
+            cost = self.get_cost(path[i], path[i + 1])
+            total += cost
+        return total
+
     def to_string(self, player_coord: tuple[int, int] | None = None) -> str:
         row_order = find_order(self.row - 1)
         matrix = deepcopy(self.matrix)

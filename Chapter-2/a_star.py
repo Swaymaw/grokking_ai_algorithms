@@ -4,21 +4,13 @@ import itertools
 from utils import Maze, animate_path
 
 
-def get_path_cost(maze: Maze, path: list[tuple[int, int]]):
-    total = 0
-    for i in range(len(path) - 1):
-        cost = maze.get_cost(path[i], path[i + 1])
-        total += cost
-    return total
-
-
 def run_astar(maze: Maze, current_point: tuple[int, int], visited_points: set = set()):
     matrix = maze.matrix
     priority_queue: list = []
     goal_point = maze.get_goal_coords()
     parent_map: dict[tuple[int, int], tuple[int, int] | None] = {current_point: None}
 
-    tie = itertools.count()
+    tie = itertools.count()  # to handle tie scores
     heapq.heappush(priority_queue, (0, next(tie), current_point))
     while priority_queue:
         _, _, next_point = heapq.heappop(priority_queue)
@@ -29,7 +21,7 @@ def run_astar(maze: Maze, current_point: tuple[int, int], visited_points: set = 
         while cur_point := parent_map.get(cur_point):
             path.append(cur_point)
         path = path[::-1]
-        path_cost = get_path_cost(maze, path + [next_point])
+        path_cost = maze.get_path_cost(path + [next_point])
 
         if matrix[next_point[0]][next_point[1]] == "2":
             return path, path_cost
@@ -68,15 +60,15 @@ if __name__ == "__main__":
         row,
         col,
         weights={
-            (0, 1): 1,
-            (1, 0): 5,
-            (0, -1): 1,
-            (-1, 0): 5,
+            (0, 1): 1,  # right
+            (1, 0): 5,  # top
+            (0, -1): 1,  # left
+            (-1, 0): 5,  # bottom
         },
     )
-    shortest_path, shortest_distance = run_astar(maze, starting_point)
+    cheapest_path, cheapest_distance = run_astar(maze, starting_point)
 
-    if shortest_distance == -1:
+    if cheapest_distance == -1:
         print("No Path Found")
     else:
-        animate_path(maze, shortest_path, starting_point, shortest_distance)
+        animate_path(maze, cheapest_path, starting_point, cheapest_distance)
