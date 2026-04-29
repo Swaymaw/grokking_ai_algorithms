@@ -16,7 +16,7 @@ def ai_move_random(board: Connect4):
 
 def play_game(board: Connect4):
     player_move = True
-    print("Welcome to Connect4 Minimax")
+    print("Welcome to Connect4 Minimax\n---\n")
     print(board)
     while board.get_valid_moves() and board.get_score_for_ai() == 0:
         while player_move:
@@ -31,7 +31,7 @@ def play_game(board: Connect4):
                 print(f"Invalid Move please enter integer between 0 to {board.col - 1}")
         print(board)
         move = ai_move_random(board)
-        print("AI Move:", move)
+        print("AI Move:", move, "\n\n")
         board.play_move(move, 1)
         player_move = True
         print(board)

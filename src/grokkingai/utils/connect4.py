@@ -111,6 +111,10 @@ class Connect4:
         val = ""
         for r in range(self.row):
             for c in range(self.col):
-                val += str(self.matrix[r][c]) + " "
+                val += " | " + str(self.matrix[r][c])
+            val += " | "
+            val += "\n"
+            if r < self.row - 1:
+                val += " |  " * (self.col + 1)
             val += "\n"
         return val
