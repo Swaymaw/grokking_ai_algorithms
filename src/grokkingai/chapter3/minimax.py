@@ -9,6 +9,11 @@ from grokkingai.utils import Connect4
 """
 
 
+def ai_move_random(board: Connect4):
+    move = random.choice(board.get_valid_moves())
+    return move
+
+
 def play_game(board: Connect4):
     player_move = True
     print("Welcome to Connect4 Minimax")
@@ -25,7 +30,7 @@ def play_game(board: Connect4):
                     exit(0)
                 print(f"Invalid Move please enter integer between 0 to {board.col - 1}")
         print(board)
-        move = random.choice(board.get_valid_moves())
+        move = ai_move_random(board)
         print("AI Move:", move)
         board.play_move(move, 1)
         player_move = True
