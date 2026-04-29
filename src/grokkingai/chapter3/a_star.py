@@ -1,7 +1,7 @@
 import heapq
 import itertools
 
-from utils import Maze, animate_path
+from grokkingai.utils import Maze, animate_path
 
 
 def run_astar(maze: Maze, current_point: tuple[int, int], visited_points: set = set()):

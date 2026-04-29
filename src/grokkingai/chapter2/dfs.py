@@ -1,4 +1,4 @@
-from utils import Maze, animate_path
+from grokkingai.utils import Maze, animate_path
 
 """
 0 -> Empty

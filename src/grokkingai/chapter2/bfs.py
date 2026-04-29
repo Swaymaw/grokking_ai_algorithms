@@ -1,6 +1,6 @@
 from collections import deque
 
-from utils import Maze, animate_path
+from grokkingai.utils import Maze, animate_path
 
 """
 0 -> Empty
@@ -18,18 +18,19 @@ def run_bfs(maze: Maze, current_point: tuple[int, int], visited_points: set = se
     parent_map: dict[tuple[int, int], tuple[int, int] | None] = {current_point: None}
     while queue:
         (r, c), depth = queue.popleft()
-        neighbors = maze.get_neighbors((r, c), include_diagonal=True)
+        neighbors = maze.get_neighbors((r, c))
         for neighbor in neighbors:
-            if neighbor not in visited_points:
-                parent_map[neighbor] = (r, c)
-                queue.append((neighbor, depth + 1))
-                # visited_points.add(neighbor)
-                if matrix[neighbor[0]][neighbor[1]] == "2":
-                    path = []
-                    cur_point = neighbor
-                    while cur_point := parent_map.get(cur_point):
-                        path.append(cur_point)
-                    return path[::-1], depth + 1
+            if neighbor in visited_points:
+                continue
+            parent_map[neighbor] = (r, c)
+            queue.append((neighbor, depth + 1))
+            visited_points.add(neighbor)
+            if matrix[neighbor[0]][neighbor[1]] == "2":
+                path = []
+                cur_point = neighbor
+                while cur_point := parent_map.get(cur_point):
+                    path.append(cur_point)
+                return path[::-1], depth + 1
 
     return [], -1
 
@@ -49,6 +50,7 @@ if __name__ == "__main__":
 
     # Processing
     maze = Maze(coordinates, row, col)
+    print(maze)
 
     shortest_path, shortest_distance = run_bfs(maze, starting_point)
 
