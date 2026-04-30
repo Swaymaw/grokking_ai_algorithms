@@ -9,7 +9,9 @@ class Connect4:
     def __init__(self, row: int, col: int, win_len=4):
         self.row = row
         self.col = col
-        self.win_len = 4
+        self.win_len = win_len
+        self.players = [2, 1]
+        self.move_count = 0
         self.matrix = [[0] * col for _ in range(self.row)]
 
     def get_valid_moves(self):
@@ -98,13 +100,14 @@ class Connect4:
         else:
             return 0
 
-    def play_move(self, move: int, player: int):
+    def play_move(self, move: int):
         if move not in self.get_valid_moves():
             raise ValueError("Invalid Move")
 
         for r in range(self.row - 1, -1, -1):
             if self.matrix[r][move] == 0:
-                self.matrix[r][move] = player
+                self.matrix[r][move] = self.players[self.move_count % 2]
+                self.move_count += 1
                 return
 
     def __str__(self):
